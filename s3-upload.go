@@ -25,6 +25,7 @@ type FileTransferToS3 struct {
 	AccessKeyId     string
 	SecretAccessKey string
 	Region          string
+	BucketName      string
 }
 
 func (f *FileTransferToS3) PutToS3(path string, filename string) {
