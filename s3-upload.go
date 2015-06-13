@@ -14,6 +14,8 @@ func main() {
 	fileTransfer := FileTransferToS3{
 		AccessKeyId:     "ACCESS_KEY_ID",
 		SecretAccessKey: "SECRET_ACCESS_KEY",
+		Region:          "us-west-2",
+		BucketName:      "bucket-name",
 	}
 
 	fileTransfer.PutToS3("./", "sample.jpg")
@@ -22,6 +24,7 @@ func main() {
 type FileTransferToS3 struct {
 	AccessKeyId     string
 	SecretAccessKey string
+	Region          string
 }
 
 func (f *FileTransferToS3) PutToS3(path string, filename string) {
@@ -33,12 +36,11 @@ func (f *FileTransferToS3) PutToS3(path string, filename string) {
 
 	cli := s3.New(&aws.Config{
 		Credentials: credentials.NewStaticCredentials(f.AccessKeyId, f.SecretAccessKey, ""),
-		Region:      "us-west-2",
+		Region:      f.Region,
 	})
 
-	bucketName := "bucket-name"
 	resp, err := cli.PutObject(&s3.PutObjectInput{
-		Bucket: aws.String(bucketName),
+		Bucket: aws.String(f.BucketName),
 		Key:    aws.String(filename),
 		Body:   file,
 	})
